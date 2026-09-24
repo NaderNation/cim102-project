@@ -35,7 +35,9 @@ No secrets are configured, and none are needed — the published demo holds no k
 
 **What works with no key at all:** the sample 3D walkthrough, the whole listing
 flow, photo scoring, all four ad templates, room highlights, the floor plan,
-PNG/JPEG/PDF download, and saved listings that survive a refresh.
+PNG/JPEG/PDF download, and completed listing records saved in the current browser.
+In-progress listing drafts are not saved yet. Browser-saved listings do not sync
+to other browsers or devices.
 
 **What a visitor's own key unlocks:** generating new Marble worlds from their own
 photos, billed to them. They paste it into Settings; it is stored in their browser
@@ -79,3 +81,8 @@ The dashboard has a "Walk through a sample property" card that loads a pre-gener
 - The proxy can't work on pages hosted on claude.ai.
 - World Labs API credits (platform.worldlabs.ai) are separate from Marble app credits.
 - Never paste API keys into chats or commit `.env`.
+
+## Planned features and review notes
+
+See [docs/FEATURES.md](docs/FEATURES.md) for the listing persistence feature
+request and a lightweight security review of the current demo setup.

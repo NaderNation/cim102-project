@@ -49,7 +49,7 @@ export default function TopBar({ view, onDashboard, onSelectListings, onCreateAc
             {openMenu === "listings" && (
               <div className="ef-nav-menu" role="menu">
                 <button role="menuitem" onClick={() => select(() => onSelectListings("own"))}>Your listings</button>
-                <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Public listings</button>
+                <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Explore homes</button>
               </div>
             )}
           </div>
@@ -73,7 +73,7 @@ export default function TopBar({ view, onDashboard, onSelectListings, onCreateAc
             <div className="ef-nav-menu ef-mobile-menu" role="menu">
               <button role="menuitem" onClick={() => select(onDashboard)}>Home</button>
               <button role="menuitem" onClick={() => select(() => onSelectListings("own"))}>Your listings</button>
-              <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Public listings</button>
+              <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Explore homes</button>
               <button role="menuitem" onClick={() => select(onCreate)}>New property</button>
               <button role="menuitem" onClick={() => select(onSettings)}>Settings</button>
               <button role="menuitem" onClick={() => select(onCreateAccount)}>Account</button>

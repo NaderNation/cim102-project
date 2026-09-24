@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { C } from "../theme.js";
 import Field from "../components/Field.jsx";
+import { ENTRY_DEMO_HOME } from "../lib/demoListings.js";
 
-export default function CreateProperty({ draft, onChange, onImportFiles, importNotice, onSubmit, error }) {
+export default function CreateProperty({ draft, onChange, onSelectDemo, onImportFiles, importNotice, onSubmit, error }) {
   const importInputRef = useRef(null);
   return (
     <div className="max-w-lg">
@@ -12,6 +13,14 @@ export default function CreateProperty({ draft, onChange, onImportFiles, importN
       <h1 style={{ color: C.ink }} className="text-3xl font-bold mb-6">
         Property details
       </h1>
+      <label className="ef-preset-select">
+        <span>START WITH A PREPARED EXAMPLE</span>
+        <select value={draft.demoPresetId || ""} onChange={(event) => onSelectDemo(event.target.value)}>
+          <option value="">Enter my own property</option>
+          <option value={ENTRY_DEMO_HOME.id}>{ENTRY_DEMO_HOME.title} · sample details</option>
+        </select>
+        <small>Select the sample to fill in its details. The next step includes one image and a prepared 3D tour.</small>
+      </label>
       <div style={{ borderColor: C.line, background: C.paperDim }} className="border rounded-sm p-6">
         <Field label="ADDRESS" value={draft.address} onChange={onChange("address")} placeholder="123 Ocean Ave, Miami, FL" />
         <label className="block mb-4">

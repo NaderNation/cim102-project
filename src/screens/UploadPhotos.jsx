@@ -23,6 +23,8 @@ export default function UploadPhotos({
   onRoomChange,
   onDimensionsChange,
   onRoomMeasurementChange,
+  demoListing,
+  onOpenPreparedTour,
 }) {
   const bestCount = Math.min(6, photos.length);
   const stillClassifying = photos.some((p) => p.classifying);
@@ -42,6 +44,17 @@ export default function UploadPhotos({
       <h1 style={{ color: C.ink }} className="text-3xl font-bold mb-6">
         Upload photos
       </h1>
+
+      {demoListing && (
+        <div className="ef-prepared-tour-panel">
+          <div>
+            <div className="ef-section-kicker">PREPARED CLASS DEMO</div>
+            <h2>One image, a ready-to-explore walkthrough</h2>
+            <p>The sample image below is bundled with the site. Open a prepared 3D interior without a generation request, or inspect the second supplied scan in the viewer. These are illustrative assets, not verified views of one property.</p>
+          </div>
+          <button className="ef-primary-button" onClick={onOpenPreparedTour}>Open prepared 3D tour</button>
+        </div>
+      )}
 
       <div
         onDragOver={(e) => e.preventDefault()}
@@ -83,7 +96,7 @@ export default function UploadPhotos({
         <div className="mt-8">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
             <div style={{ color: C.ink, fontFamily: "Arial, sans-serif" }} className="text-sm font-bold">
-              {photos.length} photo{photos.length > 1 ? "s" : ""} uploaded · sorted by quality score
+              {demoListing ? `${photos.length} sample image${photos.length === 1 ? "" : "s"} ready` : `${photos.length} photo${photos.length > 1 ? "s" : ""} uploaded · sorted by quality score`}
             </div>
             {stillClassifying && (
               <div style={{ color: C.brassDark, fontFamily: "Arial, sans-serif" }} className="text-xs font-semibold">
@@ -213,9 +226,11 @@ export default function UploadPhotos({
               : "Imported room dimensions are ready. Generate the floor-plan model now, or add photos to create visual ads too."}
           </div>
 
-          <VirtualTour photos={photos} draft={{ propertyType }} />
-          <ThreeDPropertyTour photos={photos} draft={draft} />
-          <MarbleWorldTour photos={photos} draft={draft} />
+          {!demoListing && <>
+            <VirtualTour photos={photos} draft={{ propertyType }} />
+            <ThreeDPropertyTour photos={photos} draft={draft} />
+            <MarbleWorldTour photos={photos} draft={draft} />
+          </>}
 
           <button
             onClick={onGenerate}

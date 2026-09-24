@@ -13,6 +13,8 @@ import UploadPhotos from "./screens/UploadPhotos.jsx";
 import Results from "./screens/Results.jsx";
 import Settings from "./screens/Settings.jsx";
 import SampleTour from "./screens/SampleTour.jsx";
+import PropertyDetail from "./screens/PropertyDetail.jsx";
+import { FEATURED_HOME, ENTRY_DEMO_HOME, demoListingFor } from "./lib/demoListings.js";
 import {
   loadProperties, saveProperties, savePhotos, loadStoredPhotos,
   hydratePhotos, clearPhotos, StorageError,
@@ -49,10 +51,16 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [ads, setAds] = useState([]); // {id, name, dataUrl, w, h}
   const [activeProperty, setActiveProperty] = useState(null);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [detailBackView, setDetailBackView] = useState("dashboard");
+  const [tourListing, setTourListing] = useState(FEATURED_HOME);
+  const [tourBackView, setTourBackView] = useState("dashboard");
   const [importNotice, setImportNotice] = useState("");
   const [storageError, setStorageError] = useState("");
   const [restored, setRestored] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => { window.scrollTo(0, 0); }, [view]);
 
   // Restore saved work once, on first mount. Photos need their img element
   // rebuilt from the stored data URL before anything can draw them.
@@ -96,6 +104,35 @@ export default function App() {
     setAds([]);
     setImportNotice("");
     setView("create");
+  };
+
+  const selectDemoPreset = (id) => {
+    setDraft(id === ENTRY_DEMO_HOME.id ? {
+      address: ENTRY_DEMO_HOME.address,
+      price: ENTRY_DEMO_HOME.price,
+      beds: ENTRY_DEMO_HOME.beds,
+      baths: ENTRY_DEMO_HOME.baths,
+      sqft: ENTRY_DEMO_HOME.sqft,
+      propertyType: ENTRY_DEMO_HOME.propertyType,
+      roomSpecs: [],
+      demoPresetId: ENTRY_DEMO_HOME.id,
+    } : { address: "", price: "", beds: "", baths: "", sqft: "", propertyType: "House", roomSpecs: [] });
+    setPhotos([]);
+    setAds([]);
+    setImportNotice("");
+    setFormError("");
+  };
+
+  const openProperty = (property) => {
+    setSelectedProperty(property);
+    setDetailBackView(view === "public" ? "public" : "dashboard");
+    setView("property");
+  };
+
+  const openTour = (listing, backView = view) => {
+    setTourListing(listing);
+    setTourBackView(backView);
+    setView("sample");
   };
 
   const handleDraftChange = (field) => (e) =>
@@ -155,12 +192,33 @@ export default function App() {
 
   const [formError, setFormError] = useState("");
 
-  const goToUpload = () => {
+  const goToUpload = async () => {
     if (!draft.address.trim() || !draft.price.trim()) {
       setFormError("Please fill in at least the address and price.");
       return;
     }
     setFormError("");
+    if (draft.demoPresetId === ENTRY_DEMO_HOME.id && photos.length === 0) {
+      setBusy(true);
+      try {
+        const response = await fetch(ENTRY_DEMO_HOME.coverUrl);
+        if (!response.ok) throw new Error("Sample image unavailable");
+        const blob = await response.blob();
+        const { img, dataUrl } = await fileToImage(new File([blob], "garden-view-demo.jpg", { type: blob.type || "image/jpeg" }));
+        setPhotos([{
+          id: `${Date.now()}-prepared-demo`, img, dataUrl, score: scorePhoto(img),
+          roomType: "Exterior", roomConfidence: null, classifying: false,
+          dimensions: "", length: "", width: "", features: [], condition: "unclear",
+          bestListingDescription: "", isBundledDemo: true,
+        }]);
+        setImportNotice("One bundled sample image is ready. No generation request was sent.");
+      } catch {
+        setFormError("The included demo image could not be loaded. Please try again.");
+        setBusy(false);
+        return;
+      }
+      setBusy(false);
+    }
     setView("upload");
   };
 
@@ -245,9 +303,10 @@ export default function App() {
       photoCount: photos.length,
       bestScore: best[0]?.score ?? 0,
       adCount: allAds.length,
-      coverDataUrl: best[0]?.dataUrl,
+      coverDataUrl: draft.demoPresetId ? undefined : best[0]?.dataUrl,
+      coverUrl: draft.demoPresetId ? ENTRY_DEMO_HOME.coverUrl : undefined,
     };
-    setProperties((prev) => [savedProperty, ...prev]);
+    setProperties((prev) => [savedProperty, ...prev.filter((property) => !savedProperty.demoPresetId || property.demoPresetId !== savedProperty.demoPresetId)]);
     setActiveProperty(savedProperty);
     setBusy(false);
     setView("results");
@@ -288,15 +347,20 @@ export default function App() {
           </div>
         )}
         {view === "dashboard" && (
-          <Dashboard properties={properties} onCreate={startCreate} onSampleTour={() => setView("sample")} />
+          <Dashboard properties={properties} onCreate={startCreate} onOpenProperty={openProperty} onSampleTour={() => openTour(FEATURED_HOME, "dashboard")} />
         )}
 
-        {view === "public" && <PublicListings />}
+        {view === "public" && <PublicListings properties={properties} onOpenProperty={openProperty} />}
+
+        {view === "property" && selectedProperty && (
+          <PropertyDetail property={selectedProperty} onBack={() => setView(detailBackView)} onTour={() => openTour(selectedProperty.id === FEATURED_HOME.id ? FEATURED_HOME : demoListingFor(selectedProperty), "property")} />
+        )}
 
         {view === "create" && (
             <CreateProperty
               draft={draft}
               onChange={handleDraftChange}
+              onSelectDemo={selectDemoPreset}
               onImportSpecs={importHousingSpecs}
               onImportFiles={importFiles}
               importNotice={importNotice}
@@ -323,10 +387,12 @@ export default function App() {
             onRoomChange={(id, roomType) => updatePhoto(id, { roomType, roomConfidence: 1 })}
             onDimensionsChange={(id, dimensions) => updatePhoto(id, { dimensions })}
             onRoomMeasurementChange={(id, field, value) => updatePhoto(id, { [field]: value })}
+            demoListing={demoListingFor(draft)}
+            onOpenPreparedTour={() => openTour(ENTRY_DEMO_HOME, "upload")}
           />
         )}
 
-        {view === "sample" && <SampleTour onBack={() => setView("dashboard")} />}
+        {view === "sample" && <SampleTour listing={tourListing} onBack={() => setView(tourBackView)} backLabel={tourBackView === "upload" ? "Back to photo step" : tourBackView === "dashboard" ? "Back to homes" : "Back to listing"} />}
 
         {view === "settings" && (
           <Settings
@@ -341,7 +407,7 @@ export default function App() {
         )}
 
         {view === "results" && (
-          <Results ads={ads} photos={photos} draft={draft} onDownload={downloadAd} onDownloadAll={downloadAll} onNew={startCreate} />
+          <Results ads={ads} photos={photos} draft={draft} onDownload={downloadAd} onDownloadAll={downloadAll} onNew={startCreate} demoListing={demoListingFor(draft)} onOpenPreparedTour={() => openTour(ENTRY_DEMO_HOME, "results")} />
         )}
       </main>
 
@@ -379,5 +445,3 @@ export default function App() {
     </div>
   );
 }
-
-

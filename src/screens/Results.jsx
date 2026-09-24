@@ -5,7 +5,7 @@ import VirtualTour from "./VirtualTour.jsx";
 import ThreeDPropertyTour from "../components/ThreeDPropertyTour.jsx";
 import MarbleWorldTour from "../components/MarbleWorldTour.jsx";
 
-export default function Results({ ads, photos, draft, onDownload, onDownloadAll, onNew }) {
+export default function Results({ ads, photos, draft, onDownload, onDownloadAll, onNew, demoListing, onOpenPreparedTour }) {
   return (
     <div>
       <div style={{ color: C.brassDark, fontFamily: "Arial, sans-serif" }} className="text-xs font-bold tracking-widest mb-2">
@@ -40,9 +40,16 @@ export default function Results({ ads, photos, draft, onDownload, onDownloadAll,
         </div>
       </div>
 
-      <VirtualTour photos={photos} draft={draft} />
-      <ThreeDPropertyTour photos={photos} draft={draft} />
-      <MarbleWorldTour photos={photos} draft={draft} />
+      {demoListing ? (
+        <div className="ef-prepared-tour-panel">
+          <div><div className="ef-section-kicker">SAVED DEMO PROPERTY</div><h2>Walkthrough ready</h2><p>This sample house is now in your browser's catalog. Its prepared 3D tour opens without a generation request.</p></div>
+          <button className="ef-primary-button" onClick={onOpenPreparedTour}>Open prepared 3D tour</button>
+        </div>
+      ) : <>
+        <VirtualTour photos={photos} draft={draft} />
+        <ThreeDPropertyTour photos={photos} draft={draft} />
+        <MarbleWorldTour photos={photos} draft={draft} />
+      </>}
 
       <div className="grid sm:grid-cols-2 gap-6">
         {ads.map((ad) => (

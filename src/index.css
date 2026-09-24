@@ -81,6 +81,55 @@ body { margin: 0; background: #f6f7f5; color: #1e2b32; font-family: "Urbanist", 
 .ef-property-bottom strong { color: #1e2b32; font-size: 19px; line-height: 1.2; }
 .ef-property-bottom > span { color: #65727a; font-size: 11px; text-align: right; }
 
+.ef-featured-section { margin-top: 36px; }
+.ef-featured-section .ef-section-heading h2 { font-size: 27px; }
+.ef-featured-card { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); overflow: hidden; border: 1px solid #dce3e2; border-radius: 11px; background: #fff; }
+.ef-featured-card > img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; }
+.ef-featured-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 27px 32px; }
+.ef-featured-copy h3 { margin: 13px 0 5px; color: #1e2b32; font-size: 24px; font-weight: 750; }
+.ef-featured-copy p { margin: 0 0 15px; color: #65727a; font-size: 13px; line-height: 1.5; }
+.ef-featured-copy > strong { color: #1e2b32; font-size: 22px; }
+.ef-featured-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 19px; }
+.ef-featured-copy small { margin-top: 15px; color: #65727a; font-size: 11px; }
+.ef-card-link { display: inline-flex; margin-top: 17px; padding: 0; border: 0; background: none; color: #285e62; font-size: 13px; font-weight: 750; cursor: pointer; }
+.ef-card-link:hover { text-decoration: underline; }
+.ef-demo-label { display: inline-block; margin-top: 13px; color: #285e62; font-size: 11px; font-weight: 700; }
+.ef-catalog-address { margin: -5px 0 15px; color: #65727a; font-size: 12px; }
+.ef-catalog-note { margin-top: 16px; color: #65727a; font-size: 12px; }
+
+.ef-preset-select { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; padding: 18px; border: 1px solid #bed5d0; border-radius: 10px; background: #eaf3f0; }
+.ef-preset-select > span { color: #285e62; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+.ef-preset-select select { width: 100%; padding: 10px 12px; border: 1px solid #b6cbc6; border-radius: 8px; background: #fff; color: #1e2b32; font-size: 14px; }
+.ef-preset-select small { color: #58676e; font-size: 12px; line-height: 1.4; }
+.ef-prepared-tour-panel { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin-bottom: 24px; padding: 21px 23px; border: 1px solid #bed5d0; border-radius: 11px; background: #eaf3f0; }
+.ef-prepared-tour-panel h2 { margin: 7px 0 5px; color: #1e2b32; font-size: 21px; font-weight: 750; }
+.ef-prepared-tour-panel p { max-width: 720px; margin: 0; color: #58676e; font-size: 13px; line-height: 1.5; }
+.ef-prepared-tour-panel .ef-primary-button { flex: none; }
+
+.ef-text-back { margin: 0 0 19px; padding: 0; border: 0; background: none; color: #58676e; font-size: 14px; cursor: pointer; }
+.ef-text-back:hover { color: #285e62; }
+.ef-detail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 21px; }
+.ef-detail-head h1 { margin: 7px 0 4px; color: #1e2b32; font-size: clamp(28px,4vw,40px); line-height: 1.12; font-weight: 750; }
+.ef-detail-head p { margin: 0; color: #65727a; font-size: 14px; }
+.ef-detail-head > strong { color: #1e2b32; font-size: 26px; white-space: nowrap; }
+.ef-detail-cover { display: block; width: 100%; height: clamp(240px,38vw,430px); border-radius: 11px; object-fit: cover; }
+.ef-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 19px; margin-top: 19px; }
+.ef-detail-panel { min-width: 0; padding: 23px; border: 1px solid #dce3e2; border-radius: 11px; background: #fff; }
+.ef-detail-panel h2 { margin: 0 0 14px; color: #1e2b32; font-size: 21px; }
+.ef-detail-panel p { color: #58676e; font-size: 13px; line-height: 1.55; }
+.ef-detail-facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ef-detail-facts span { padding: 7px 10px; border-radius: 6px; background: #f1f5f3; color: #285e62; font-size: 12px; font-weight: 700; }
+.ef-illustrative-note { padding: 12px 14px; border-left: 3px solid #8aaea4; background: #f3f8f6; }
+.ef-map-preview { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 7px; min-height: 190px; margin-top: 14px; border: 1px solid #cbdcd6; border-radius: 8px; background: radial-gradient(circle at 50% 48%,#d6e7e0 0 2%,transparent 2.2%), repeating-linear-gradient(35deg,transparent 0 28px,rgba(124,162,149,.17) 29px 31px,transparent 32px 63px), repeating-linear-gradient(115deg,transparent 0 35px,rgba(124,162,149,.17) 36px 38px,transparent 39px 70px), #eaf3ee; color: #285e62; text-decoration: none; }
+.ef-map-preview:hover { border-color: #7da59c; }
+.ef-map-preview .ef-map-pin { font-size: 34px; line-height: 1; }
+.ef-map-preview strong { padding: 2px 8px; background: rgba(255,255,255,.85); border-radius: 4px; font-size: 14px; }
+.ef-map-preview > span:last-child { padding: 2px 8px; background: rgba(255,255,255,.85); border-radius: 4px; font-size: 12px; font-weight: 700; }
+.ef-tour-choices { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.ef-tour-choices button { padding: 9px 13px; border: 1px solid #cbdcd6; border-radius: 8px; background: #fff; color: #285e62; font-size: 12px; font-weight: 700; cursor: pointer; }
+.ef-tour-choices button.is-selected { border-color: #285e62; background: #eaf3f0; color: #214f53; }
+.ef-scan-note { margin: 0 0 13px; padding: 10px 12px; border-left: 3px solid #a67f48; background: #faf5ea; color: #705734; font-size: 12px; line-height: 1.5; }
+
 @media (max-width: 1000px) {
   .ef-property-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
@@ -93,6 +142,9 @@ body { margin: 0; background: #f6f7f5; color: #1e2b32; font-family: "Urbanist", 
   .ef-dashboard-hero { grid-template-columns: 1fr; }
   .ef-house-collage { order: -1; height: 235px; min-height: 0; }
   .ef-hero-copy { padding: 28px; }
+  .ef-featured-card { grid-template-columns: 1fr; }
+  .ef-featured-card > img { height: 240px; min-height: 0; }
+  .ef-detail-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -116,4 +168,10 @@ body { margin: 0; background: #f6f7f5; color: #1e2b32; font-family: "Urbanist", 
   .ef-empty-listings .ef-primary-button { width: 100%; margin-left: 0; }
   .ef-property-grid { grid-template-columns: 1fr; }
   .ef-property-cover { height: 185px; }
+  .ef-featured-section .ef-section-heading h2 { font-size: 25px; }
+  .ef-featured-copy { padding: 23px; }
+  .ef-prepared-tour-panel { align-items: stretch; flex-direction: column; padding: 18px; }
+  .ef-detail-head { align-items: flex-start; flex-direction: column; }
+  .ef-detail-head > strong { font-size: 23px; }
+  .ef-detail-panel { padding: 18px; }
 }

@@ -1,9 +1,10 @@
 import React from "react";
-import { Globe2, Home, Plus } from "../icons.jsx";
+import { Home, Plus } from "../icons.jsx";
 import { formatPrice } from "../lib/format.js";
+import { FEATURED_HOME, demoListingFor } from "../lib/demoListings.js";
 import MovingHouseCollage from "../components/MovingHouseCollage.jsx";
 
-export default function Dashboard({ properties, onCreate, onSampleTour }) {
+export default function Dashboard({ properties, onCreate, onOpenProperty, onSampleTour }) {
   const photoCount = properties.reduce((sum, property) => sum + (Number(property.photoCount) || 0), 0);
   const adCount = properties.reduce((sum, property) => sum + (Number(property.adCount) || 0), 0);
   const stats = [
@@ -35,21 +36,32 @@ export default function Dashboard({ properties, onCreate, onSampleTour }) {
         <MovingHouseCollage />
       </section>
 
-      <button className="ef-tour-prompt" onClick={onSampleTour}>
-        <span className="ef-tour-icon"><Globe2 size={20} /></span>
-        <span className="ef-tour-copy">
-          <strong>Explore a finished property tour</strong>
-          <span>See how a property walkthrough looks before creating your own.</span>
-        </span>
-        <span className="ef-tour-action">Open tour <span aria-hidden="true">→</span></span>
-      </button>
+      <section className="ef-featured-section" aria-labelledby="featured-heading">
+        <div className="ef-section-heading">
+          <div><div className="ef-section-kicker">FEATURED DEMO HOME</div><h2 id="featured-heading">Explore a home online</h2><p>Preview a listing and its prepared walkthrough before planning a visit.</p></div>
+        </div>
+        <div className="ef-featured-card">
+          <img src={FEATURED_HOME.coverUrl} alt="Illustrative exterior of Harbor View Residence" />
+          <div className="ef-featured-copy">
+            <span className="ef-property-type">Illustrative listing</span>
+            <h3>{FEATURED_HOME.title}</h3>
+            <p>{FEATURED_HOME.address} · {FEATURED_HOME.beds} beds · {FEATURED_HOME.baths} baths · {FEATURED_HOME.sqft} sq ft</p>
+            <strong>{formatPrice(FEATURED_HOME.price)}</strong>
+            <div className="ef-featured-actions">
+              <button className="ef-primary-button" onClick={() => onOpenProperty(FEATURED_HOME)}>View listing</button>
+              <button className="ef-secondary-button" onClick={onSampleTour}>Open 3D tour</button>
+            </div>
+            <small>Photo and 3D interior are illustrative demo assets.</small>
+          </div>
+        </div>
+      </section>
 
       <section aria-labelledby="listings-heading" className="ef-listings-section">
         <div className="ef-section-heading">
           <div>
             <div className="ef-section-kicker">PROPERTY PORTFOLIO</div>
             <h2 id="listings-heading">Your properties</h2>
-            <p>All of the properties saved in this browser.</p>
+            <p>Properties you add are saved in this browser.</p>
           </div>
           {properties.length > 0 && <span className="ef-listing-count">{properties.length} listing{properties.length === 1 ? "" : "s"}</span>}
         </div>
@@ -67,8 +79,8 @@ export default function Dashboard({ properties, onCreate, onSampleTour }) {
           <div className="ef-property-grid">
             {properties.map((property) => (
               <article key={property.id} className="ef-property-card">
-                {property.coverDataUrl ? (
-                  <img src={property.coverDataUrl} alt="" className="ef-property-cover" />
+                {(property.coverDataUrl || property.coverUrl) ? (
+                  <img src={property.coverDataUrl || property.coverUrl} alt="" className="ef-property-cover" />
                 ) : (
                   <div className="ef-property-cover ef-property-placeholder" aria-hidden="true" />
                 )}
@@ -86,6 +98,8 @@ export default function Dashboard({ properties, onCreate, onSampleTour }) {
                     <div><small>Price</small><strong>{formatPrice(property.price)}</strong></div>
                     <span>{property.photoCount || 0} photos · {property.adCount || 0} ads</span>
                   </div>
+                  {demoListingFor(property) && <span className="ef-demo-label">Prepared 3D tour included</span>}
+                  <button className="ef-card-link" onClick={() => onOpenProperty(property)}>View property →</button>
                 </div>
               </article>
             ))}

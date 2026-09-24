@@ -54,12 +54,18 @@ export default function SplatViewer({ world, url, label }) {
   const [error, setError] = useState("");
   const [locked, setLocked] = useState(false);
 
+  const bundledScene = typeof url === "string" && url.startsWith("/");
   const [backend, setBackend] = useState(null);
-  useEffect(() => { hasBackend().then(setBackend); }, []);
+  useEffect(() => {
+    if (bundledScene) return undefined;
+    let active = true;
+    hasBackend().then((available) => { if (active) setBackend(available); });
+    return () => { active = false; };
+  }, [bundledScene]);
 
-  // Wait for detection before choosing a URL, so the splat is never fetched
-  // through a proxy that does not exist (or fetched twice).
-  const source = backend === null ? null : splatFetchUrl(url || null, { backend });
+  // Bundled scenes use their local URL immediately. Remote scenes wait for
+  // backend detection so they are not fetched through the wrong route.
+  const source = bundledScene ? url : backend === null ? null : splatFetchUrl(url || null, { backend });
 
   useEffect(() => {
     const mount = mountRef.current;

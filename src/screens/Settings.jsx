@@ -147,7 +147,7 @@ export default function Settings({ onBack, onStorageCleared }) {
               </div>
             )}
             {test.status === "error" && (
-              <div style={{ color: "#A4402F", fontFamily: SANS }} className="text-sm mt-3 flex items-start gap-1.5">
+              <div style={{ color: "#F3B9B0", fontFamily: SANS }} className="text-sm mt-3 flex items-start gap-1.5">
                 <AlertCircle size={14} style={{ flexShrink: 0, marginTop: 2 }} /> {test.message}
               </div>
             )}

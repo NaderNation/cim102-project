@@ -12,13 +12,13 @@ const HOUSE_IMAGES = [
   `${import.meta.env.BASE_URL}houses/waterfront-estate.jpg`,
 ];
 const ADVISOR_CSS = `
-.advisor-stage{position:relative;height:clamp(220px,34vw,340px);border-radius:28px;overflow:hidden;isolation:isolate;background:linear-gradient(135deg,#E3EEE7 0%,#F4F8F5 55%,#DDE8F2 100%);box-shadow:0 18px 40px rgba(23,32,29,.10)}
+.advisor-stage{position:relative;height:clamp(220px,34vw,340px);border:1px solid #262626;border-radius:12px;overflow:hidden;isolation:isolate;background:linear-gradient(120deg,#1a1a1a 0%,#141414 55%,#211735 100%);box-shadow:0 20px 48px rgba(0,0,0,.32)}
 .property-collage{position:absolute;inset:-14% -6%;display:flex;flex-direction:column;justify-content:center;gap:16px;transform:rotate(-4deg);opacity:.92;z-index:0}
 .property-collage-track{display:flex;gap:16px;width:max-content}
 .property-collage-track-one{animation:ef-marquee-left 48s linear infinite}
 .property-collage-track-two{animation:ef-marquee-right 56s linear infinite}
-.property-tile{flex:0 0 auto;width:210px;height:140px;border-radius:16px;background-size:cover;background-position:center;border:4px solid rgba(255,255,255,.88);box-shadow:0 8px 20px rgba(23,32,29,.16)}
-.advisor-stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 62%,rgba(251,252,250,.6),rgba(251,252,250,0) 62%)}
+.property-tile{flex:0 0 auto;width:210px;height:140px;border-radius:10px;background-size:cover;background-position:center;border:3px solid rgba(255,255,255,.2);box-shadow:0 8px 20px rgba(0,0,0,.32)}
+.advisor-stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 62%,rgba(20,20,20,.18),rgba(20,20,20,.64) 78%)}
 .advisor-webgl{position:absolute;inset:0;z-index:2}
 .advisor-fallback{display:none}
 @keyframes ef-marquee-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -51,8 +51,8 @@ export default function AnimatedPropertyAdvisor() {
     mount.replaceChildren(renderer.domElement);
     mount.closest(".advisor-stage")?.classList.add("has-webgl");
 
-    scene.add(new THREE.HemisphereLight(0xf8fbf8, 0x1d4d43, 2.4));
-    const keyLight = new THREE.DirectionalLight(0xffe0b2, 3.2);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x211735, 2.4));
+    const keyLight = new THREE.DirectionalLight(0xe9ddff, 3.2);
     keyLight.position.set(3, 6, 5);
     scene.add(keyLight);
 
@@ -61,12 +61,12 @@ export default function AnimatedPropertyAdvisor() {
     avatar.scale.setScalar(0.82);
     scene.add(avatar);
 
-    const suit = new THREE.MeshStandardMaterial({ color: 0x1d4d43, roughness: 0.62 });
+    const suit = new THREE.MeshStandardMaterial({ color: 0x703bf7, roughness: 0.62 });
     const shirt = new THREE.MeshStandardMaterial({ color: 0xf8fbf8, roughness: 0.72 });
     const skin = new THREE.MeshStandardMaterial({ color: 0xc98f6d, roughness: 0.78 });
-    const hair = new THREE.MeshStandardMaterial({ color: 0x17201d, roughness: 0.85 });
-    const brass = new THREE.MeshStandardMaterial({ color: 0xd6b584, roughness: 0.52, metalness: 0.16 });
-    const boardMaterial = new THREE.MeshStandardMaterial({ color: 0xf8fbf8, roughness: 0.84 });
+    const hair = new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.85 });
+    const brass = new THREE.MeshStandardMaterial({ color: 0xa685fa, roughness: 0.52, metalness: 0.16 });
+    const boardMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.84 });
 
     const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.62, 0.78, 5, 12), suit);
     torso.position.y = 0.55;

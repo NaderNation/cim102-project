@@ -9,7 +9,7 @@ export default function Field({ label, ...props }) {
       </span>
       <input
         {...props}
-        style={{ borderColor: C.line, background: "#FBF9F4", color: C.ink, fontFamily: "Arial, sans-serif" }}
+        style={{ borderColor: C.line, background: C.paperDim, color: C.ink, fontFamily: "'Urbanist', 'DM Sans', Arial, sans-serif" }}
         className="w-full border rounded-sm px-3 py-2.5 text-sm outline-none focus:ring-2"
       />
     </label>

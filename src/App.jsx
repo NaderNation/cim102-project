@@ -264,8 +264,8 @@ export default function App() {
 
   return (
     <div
-      style={{ background: C.paper, minHeight: "100%", color: C.ink, fontFamily: "'DM Sans', Arial, sans-serif" }}
-      className="w-full min-h-screen"
+      style={{ background: C.paper, minHeight: "100%", color: C.ink, fontFamily: "'Urbanist', 'DM Sans', Arial, sans-serif" }}
+      className="estateflow-app w-full min-h-screen"
     >
       <TopBar
         view={view}
@@ -275,11 +275,11 @@ export default function App() {
         onSettings={() => setView("settings")}
       />
 
-      <div className="max-w-5xl mx-auto px-6 py-10">
+      <main className="max-w-7xl mx-auto px-6 py-10">
         {storageError && (
           <div
             role="alert"
-            style={{ borderColor: "#D9B3AA", background: "#FBF1EF", color: "#A4402F", fontFamily: SANS }}
+            style={{ borderColor: "#653733", background: "#2A1919", color: "#F3B9B0", fontFamily: SANS }}
             className="border rounded-sm px-4 py-3 mb-6 text-sm flex items-start justify-between gap-4"
           >
             <span>{storageError}</span>
@@ -342,7 +342,7 @@ export default function App() {
         {view === "results" && (
           <Results ads={ads} photos={photos} draft={draft} onDownload={downloadAd} onDownloadAll={downloadAll} onNew={startCreate} />
         )}
-      </div>
+      </main>
 
       <footer style={{ borderTop: `1px solid ${C.line}`, padding: "28px 24px", textAlign: "center", marginTop: 48 }}>
         <button
@@ -378,8 +378,6 @@ export default function App() {
     </div>
   );
 }
-
-
 
 
 

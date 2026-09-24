@@ -1,4 +1,15 @@
 @import "tailwindcss";
 
 html, body, #root { min-height: 100%; }
-body { margin: 0; background: #FBFCFA; font-family: "DM Sans", Arial, sans-serif; }
+body { margin: 0; background: #141414; color: #FFFFFF; font-family: "Urbanist", "DM Sans", Arial, sans-serif; }
+
+.estateflow-app { min-height: 100vh; background: #141414; color: #FFFFFF; }
+.estateflow-app .rounded-sm { border-radius: 12px; }
+.estateflow-app button, .estateflow-app input, .estateflow-app select, .estateflow-app textarea { font-family: inherit; }
+.estateflow-app button { transition: background-color .18s ease, border-color .18s ease, color .18s ease, opacity .18s ease, transform .18s ease; }
+.estateflow-app button:focus-visible, .estateflow-app a:focus-visible, .estateflow-app input:focus-visible, .estateflow-app select:focus-visible, .estateflow-app textarea:focus-visible { outline: 2px solid #A685FA; outline-offset: 2px; }
+.estateflow-app input, .estateflow-app select, .estateflow-app textarea { color-scheme: dark; }
+
+@media (max-width: 640px) {
+  .estateflow-app main { padding-inline: 16px; }
+}

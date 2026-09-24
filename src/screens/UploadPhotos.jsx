@@ -135,7 +135,7 @@ export default function UploadPhotos({
                       value={p.roomType || ""}
                       disabled={p.classifying}
                       onChange={(e) => onRoomChange(p.id, e.target.value)}
-                      style={{ borderColor: C.line, background: "#FBF9F4", color: C.ink }}
+                      style={{ borderColor: C.line, background: C.paperDim, color: C.ink }}
                       className="w-full border rounded-sm px-2 py-1.5 text-xs outline-none disabled:opacity-50"
                     >
                       <option value="" disabled>
@@ -166,7 +166,7 @@ export default function UploadPhotos({
                         onChange={(e) => onRoomMeasurementChange(p.id, "length", e.target.value)}
                         placeholder="Length"
                         aria-label={`${p.roomType || "Room"} length in feet`}
-                        style={{ borderColor: C.line, background: "#FBF9F4", color: C.ink }}
+                        style={{ borderColor: C.line, background: C.paperDim, color: C.ink }}
                         className="w-full border rounded-sm px-2 py-1.5 text-xs outline-none"
                       />
                       <input
@@ -177,7 +177,7 @@ export default function UploadPhotos({
                         onChange={(e) => onRoomMeasurementChange(p.id, "width", e.target.value)}
                         placeholder="Width"
                         aria-label={`${p.roomType || "Room"} width in feet`}
-                        style={{ borderColor: C.line, background: "#FBF9F4", color: C.ink }}
+                        style={{ borderColor: C.line, background: C.paperDim, color: C.ink }}
                         className="w-full border rounded-sm px-2 py-1.5 text-xs outline-none"
                       />
                     </div>
@@ -192,7 +192,7 @@ export default function UploadPhotos({
                       onChange={(e) => onDimensionsChange(p.id, e.target.value)}
                       placeholder="Notes, e.g. bay window"
                       aria-label={`${p.roomType || "Room"} dimension notes`}
-                      style={{ borderColor: C.line, background: "#FBF9F4", color: C.ink }}
+                      style={{ borderColor: C.line, background: C.paperDim, color: C.ink }}
                       className="w-full border rounded-sm px-2 py-1.5 text-xs outline-none mt-1.5"
                     />
                     {!p.classifying && (p.features?.length > 0 || p.bestListingDescription) && (

@@ -16,8 +16,8 @@ export default function TopBar({ view, onDashboard, onSelectListings, onCreateAc
   const pick = (which) => { setOpen(false); onSelectListings(which); };
   const item = { display: "block", width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", padding: "12px 16px", borderRadius: 10, fontFamily: SANS };
   return (
-    <header style={{ background: "rgba(251,252,250,0.94)", borderBottom: `1px solid ${C.line}`, backdropFilter: "blur(12px)", position: "sticky", top: "env(safe-area-inset-top, 0px)", zIndex: 20, padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontFamily: SANS }}>
-      <style>{".ef-menu-item:hover,.ef-menu-item:focus-visible{background:#EEF3EF!important;outline:none}"}</style>
+    <header style={{ background: "rgba(26,26,26,0.94)", borderBottom: `1px solid ${C.line}`, backdropFilter: "blur(12px)", position: "sticky", top: "env(safe-area-inset-top, 0px)", zIndex: 20, padding: "14px max(24px, calc((100vw - 1440px) / 2))", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontFamily: SANS }}>
+      <style>{".ef-menu-item:hover,.ef-menu-item:focus-visible{background:#262626!important;outline:none}"}</style>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div style={{ background: C.paperDim, width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <Building2 size={20} color={C.brass} />
@@ -31,12 +31,12 @@ export default function TopBar({ view, onDashboard, onSelectListings, onCreateAc
             onClick={() => setOpen((o) => !o)}
             aria-haspopup="menu"
             aria-expanded={open}
-            style={{ background: C.paperDim, color: C.forest, border: `1.5px solid ${C.forest}`, borderRadius: 10, padding: "8px 16px", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: SANS }}
+            style={{ background: C.paper, color: C.ink, border: `1px solid ${C.line}`, borderRadius: 10, padding: "9px 16px", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: SANS }}
           >
             View listings
           </button>
           {open && (
-            <div role="menu" style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, width: 300, maxWidth: "calc(100vw - 48px)", background: C.card, border: `1px solid ${C.line}`, borderRadius: 16, boxShadow: "0 16px 40px rgba(23,32,29,0.16)", padding: "16px 12px 12px", zIndex: 30 }}>
+            <div role="menu" style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, width: 300, maxWidth: "calc(100vw - 48px)", background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, boxShadow: "0 16px 40px rgba(0,0,0,0.48)", padding: "16px 12px 12px", zIndex: 30 }}>
               <div style={{ color: C.forest, fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", padding: "0 16px 8px" }}>WHICH LISTINGS?</div>
               <button role="menuitem" className="ef-menu-item" onClick={() => pick("public")} style={item}>
                 <div style={{ color: C.ink, fontSize: 16, fontWeight: 700 }}>View public listings</div>

@@ -5,6 +5,11 @@ const HOUSE_IMAGES = [
   `${import.meta.env.BASE_URL}houses/coastal.jpg`,
   `${import.meta.env.BASE_URL}houses/brick-colonial.jpg`,
   `${import.meta.env.BASE_URL}houses/modern-stucco.jpg`,
+  `${import.meta.env.BASE_URL}houses/log-cabin.jpg`,
+  `${import.meta.env.BASE_URL}houses/estate-garden.jpg`,
+  `${import.meta.env.BASE_URL}houses/modern-white.jpg`,
+  `${import.meta.env.BASE_URL}houses/timber-contemporary.jpg`,
+  `${import.meta.env.BASE_URL}houses/waterfront-estate.jpg`,
 ];
 const ADVISOR_CSS = `
 .advisor-stage{position:relative;height:clamp(220px,34vw,340px);border-radius:28px;overflow:hidden;isolation:isolate;background:linear-gradient(135deg,#E3EEE7 0%,#F4F8F5 55%,#DDE8F2 100%);box-shadow:0 18px 40px rgba(23,32,29,.10)}
@@ -174,9 +179,9 @@ export default function AnimatedPropertyAdvisor() {
     <div aria-hidden="true" className="advisor-stage">
       <style>{ADVISOR_CSS}</style>
       <div className="property-collage">
-        {[["one", [0, 1, 2, 3]], ["two", [2, 0, 3, 1]]].map(([track, order]) => (
+        {[["one", [0, 1, 2, 3, 4, 5, 6, 7, 8]], ["two", [5, 2, 7, 0, 8, 3, 6, 1, 4]]].map(([track, order]) => (
           <div key={track} className={`property-collage-track property-collage-track-${track}`}>
-            {[0, 1, 2, 3].flatMap(() => order).map((tile, i) => (
+            {[0, 1].flatMap(() => order).map((tile, i) => (
               <div key={`${track}-${i}`} className="property-tile" style={{ backgroundImage: `url("${HOUSE_IMAGES[tile]}")` }} />
             ))}
           </div>

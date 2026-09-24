@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+html, body, #root { min-height: 100%; }
+body { margin: 0; background: #FBFCFA; font-family: "DM Sans", Arial, sans-serif; }

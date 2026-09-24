@@ -1,0 +1,12 @@
+node_modules
+dist
+.env
+
+# editor / tooling noise
+.DS_Store
+.remember/
+.playwright-mcp/
+
+# The 30MB sample splat IS committed: the GitHub Pages demo needs it.
+# Only the original download folder stays out.
+example_spz/

@@ -1,15 +1,15 @@
 // ---------- Palette ----------
-// EstateFlow adapts the Figma template's charcoal surfaces and violet emphasis.
+// Quiet, readable light palette for the property workspace.
 export const C = {
-  paper: "#141414",
-  paperDim: "#1A1A1A",
-  ink: "#FFFFFF",
-  inkSoft: "#999999",
-  brass: "#703BF7",
-  brassDark: "#703BF7",
-  forest: "#703BF7",
-  line: "#262626",
-  card: "#141414",
+  paper: "#F6F7F5",
+  paperDim: "#FFFFFF",
+  ink: "#1E2B32",
+  inkSoft: "#65727A",
+  brass: "#285E62",
+  brassDark: "#214F53",
+  forest: "#285E62",
+  line: "#DCE3E2",
+  card: "#FFFFFF",
 };
 
 export const SANS = "'Urbanist', 'DM Sans', Arial, sans-serif";

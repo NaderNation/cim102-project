@@ -1,8 +1,7 @@
 import React from "react";
 import { Globe2, Home, Plus } from "../icons.jsx";
 import { formatPrice } from "../lib/format.js";
-
-const HERO_IMAGE = `${import.meta.env.BASE_URL}houses/modern-stone.jpg`;
+import MovingHouseCollage from "../components/MovingHouseCollage.jsx";
 
 export default function Dashboard({ properties, onCreate, onSampleTour }) {
   const photoCount = properties.reduce((sum, property) => sum + (Number(property.photoCount) || 0), 0);
@@ -33,9 +32,7 @@ export default function Dashboard({ properties, onCreate, onSampleTour }) {
             ))}
           </div>
         </div>
-        <div className="ef-hero-photo" aria-hidden="true">
-          <img src={HERO_IMAGE} alt="" />
-        </div>
+        <MovingHouseCollage />
       </section>
 
       <button className="ef-tour-prompt" onClick={onSampleTour}>

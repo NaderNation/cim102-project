@@ -280,7 +280,7 @@ export default function App() {
         {storageError && (
           <div
             role="alert"
-            style={{ borderColor: "#653733", background: "#2A1919", color: "#F3B9B0", fontFamily: SANS }}
+            style={{ borderColor: "#D8A8A2", background: "#FFF1EF", color: "#8E3F38", fontFamily: SANS }}
             className="border rounded-sm px-4 py-3 mb-6 text-sm flex items-start justify-between gap-4"
           >
             <span>{storageError}</span>
@@ -379,6 +379,5 @@ export default function App() {
     </div>
   );
 }
-
 
 

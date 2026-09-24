@@ -52,7 +52,11 @@ export default function SplatViewer({ world, url, label }) {
   const [status, setStatus] = useState("idle"); // idle | loading | ready | error
   const [progress, setProgress] = useState({ percent: 0, loaded: 0, total: 0 });
   const [error, setError] = useState("");
+  const [active, setActive] = useState(false);
   const [locked, setLocked] = useState(false);
+  const [lockUnavailable, setLockUnavailable] = useState(false);
+  const activeRef = useRef(false);
+  const controlsRef = useRef(null);
 
   const bundledScene = typeof url === "string" && url.startsWith("/");
   const [backend, setBackend] = useState(null);
@@ -96,16 +100,50 @@ export default function SplatViewer({ world, url, label }) {
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
     mount.appendChild(renderer.domElement);
+    renderer.domElement.style.touchAction = "none";
+    renderer.domElement.style.cursor = "grab";
+
+    activeRef.current = false;
+    setActive(false);
+    setLocked(false);
+    setLockUnavailable(false);
 
     // --- look ---
     const euler = new THREE.Euler(0, 0, 0, "YXZ");
-    const onMouseMove = (event) => {
-      if (document.pointerLockElement !== renderer.domElement) return;
+    const look = (dx, dy) => {
       euler.setFromQuaternion(camera.quaternion);
-      euler.y -= event.movementX * LOOK_SENSITIVITY;
-      euler.x -= event.movementY * LOOK_SENSITIVITY;
+      euler.y -= dx * LOOK_SENSITIVITY;
+      euler.x -= dy * LOOK_SENSITIVITY;
       euler.x = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, euler.x));
       camera.quaternion.setFromEuler(euler);
+    };
+    const onMouseMove = (event) => {
+      if (document.pointerLockElement !== renderer.domElement) return;
+      look(event.movementX, event.movementY);
+    };
+    let dragging = false;
+    let previousX = 0;
+    let previousY = 0;
+    const onPointerDown = (event) => {
+      if (!activeRef.current || document.pointerLockElement === renderer.domElement) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      dragging = true;
+      previousX = event.clientX;
+      previousY = event.clientY;
+      renderer.domElement.setPointerCapture?.(event.pointerId);
+      renderer.domElement.style.cursor = "grabbing";
+      mount.focus({ preventScroll: true });
+    };
+    const onPointerMove = (event) => {
+      if (!dragging) return;
+      look(event.clientX - previousX, event.clientY - previousY);
+      previousX = event.clientX;
+      previousY = event.clientY;
+    };
+    const onPointerUp = (event) => {
+      dragging = false;
+      renderer.domElement.style.cursor = "grab";
+      if (renderer.domElement.hasPointerCapture?.(event.pointerId)) renderer.domElement.releasePointerCapture(event.pointerId);
     };
 
     // --- move ---
@@ -114,25 +152,50 @@ export default function SplatViewer({ world, url, label }) {
       "KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
     ]);
     const onKeyDown = (event) => {
-      if (document.pointerLockElement !== renderer.domElement) return;
+      if (!activeRef.current || (document.pointerLockElement !== renderer.domElement && !mount.contains(document.activeElement))) return;
+      if (event.code === "Escape" && document.pointerLockElement !== renderer.domElement) {
+        activeRef.current = false;
+        keys.clear();
+        setActive(false);
+        return;
+      }
+      if (!MOVEMENT_KEYS.has(event.code) && event.code !== "ShiftLeft" && event.code !== "ShiftRight") return;
       // Arrow keys scroll the page otherwise, yanking the viewport while walking.
       if (MOVEMENT_KEYS.has(event.code)) event.preventDefault();
       keys.add(event.code);
     };
     const onKeyUp = (event) => keys.delete(event.code);
+    const onWindowBlur = () => keys.clear();
 
-    const requestLock = () => renderer.domElement.requestPointerLock?.();
+    const requestLock = () => {
+      mount.focus({ preventScroll: true });
+      if (!renderer.domElement.requestPointerLock) {
+        setLockUnavailable(true);
+        return;
+      }
+      try {
+        renderer.domElement.requestPointerLock()?.catch?.(() => setLockUnavailable(true));
+      } catch {
+        setLockUnavailable(true);
+      }
+    };
     const onLockChange = () => {
       const isLocked = document.pointerLockElement === renderer.domElement;
       setLocked(isLocked);
       if (!isLocked) keys.clear(); // otherwise a key held during exit sticks
     };
+    const onLockError = () => setLockUnavailable(true);
 
-    renderer.domElement.addEventListener("click", requestLock);
+    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+    renderer.domElement.addEventListener("pointermove", onPointerMove);
+    renderer.domElement.addEventListener("pointerup", onPointerUp);
+    renderer.domElement.addEventListener("pointercancel", onPointerUp);
     document.addEventListener("pointerlockchange", onLockChange);
+    document.addEventListener("pointerlockerror", onLockError);
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onWindowBlur);
 
     const onResize = () => {
       if (disposed) return;
@@ -149,28 +212,44 @@ export default function SplatViewer({ world, url, label }) {
     const right = new THREE.Vector3();
     const clock = new THREE.Clock();
 
-    const animate = () => {
-      frame = requestAnimationFrame(animate);
-      const delta = Math.min(clock.getDelta(), 0.1);
-      const speed = WALK_SPEED * (keys.has("ShiftLeft") || keys.has("ShiftRight") ? RUN_MULTIPLIER : 1) * delta;
-
-      camera.getWorldDirection(forward);
-      forward.y = 0;
-      if (forward.lengthSq() > 0) forward.normalize();
-      right.crossVectors(forward, camera.up).normalize();
-
-      if (keys.has("KeyW") || keys.has("ArrowUp")) camera.position.addScaledVector(forward, speed);
-      if (keys.has("KeyS") || keys.has("ArrowDown")) camera.position.addScaledVector(forward, -speed);
-      if (keys.has("KeyD") || keys.has("ArrowRight")) camera.position.addScaledVector(right, speed);
-      if (keys.has("KeyA") || keys.has("ArrowLeft")) camera.position.addScaledVector(right, -speed);
-
-      // Stay at eye height and inside the reconstructed bubble.
+    const keepInBounds = () => {
       camera.position.y = eyeHeight;
       const offset = camera.position.clone().sub(origin);
       offset.y = 0;
       if (offset.length() > ROAM_RADIUS_M) {
         offset.setLength(ROAM_RADIUS_M);
         camera.position.set(origin.x + offset.x, eyeHeight, origin.z + offset.z);
+      }
+    };
+
+    const move = (code, distance) => {
+      camera.getWorldDirection(forward);
+      forward.y = 0;
+      if (forward.lengthSq() > 0) forward.normalize();
+      right.crossVectors(forward, camera.up).normalize();
+      if (code === "KeyW" || code === "ArrowUp") camera.position.addScaledVector(forward, distance);
+      if (code === "KeyS" || code === "ArrowDown") camera.position.addScaledVector(forward, -distance);
+      if (code === "KeyD" || code === "ArrowRight") camera.position.addScaledVector(right, distance);
+      if (code === "KeyA" || code === "ArrowLeft") camera.position.addScaledVector(right, -distance);
+      keepInBounds();
+    };
+    controlsRef.current = {
+      step: (code) => { move(code, 0.55); mount.focus({ preventScroll: true }); },
+      clearKeys: () => keys.clear(),
+      requestLock,
+      reset: () => { camera.position.copy(origin); camera.rotation.set(0, 0, 0); mount.focus({ preventScroll: true }); },
+    };
+
+    const animate = () => {
+      frame = requestAnimationFrame(animate);
+      const delta = Math.min(clock.getDelta(), 0.1);
+      const speed = WALK_SPEED * (keys.has("ShiftLeft") || keys.has("ShiftRight") ? RUN_MULTIPLIER : 1) * delta;
+
+      if (activeRef.current) {
+        if (keys.has("KeyW") || keys.has("ArrowUp")) move("KeyW", speed);
+        if (keys.has("KeyS") || keys.has("ArrowDown")) move("KeyS", speed);
+        if (keys.has("KeyD") || keys.has("ArrowRight")) move("KeyD", speed);
+        if (keys.has("KeyA") || keys.has("ArrowLeft")) move("KeyA", speed);
       }
 
       renderer.render(scene, camera);
@@ -206,20 +285,39 @@ export default function SplatViewer({ world, url, label }) {
       disposed = true;
       controller.abort();
       cancelAnimationFrame(frame);
-      renderer.domElement.removeEventListener("click", requestLock);
+      renderer.domElement.removeEventListener("pointerdown", onPointerDown);
+      renderer.domElement.removeEventListener("pointermove", onPointerMove);
+      renderer.domElement.removeEventListener("pointerup", onPointerUp);
+      renderer.domElement.removeEventListener("pointercancel", onPointerUp);
       document.removeEventListener("pointerlockchange", onLockChange);
+      document.removeEventListener("pointerlockerror", onLockError);
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onWindowBlur);
       window.removeEventListener("resize", onResize);
       if (document.pointerLockElement === renderer.domElement) document.exitPointerLock?.();
       scene.traverse((object) => object.dispose?.());
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
+      controlsRef.current = null;
     };
   }, [source, world]);
 
   const exitLook = useCallback(() => document.exitPointerLock?.(), []);
+
+  const startExploring = () => {
+    activeRef.current = true;
+    setActive(true);
+    mountRef.current?.focus({ preventScroll: true });
+  };
+
+  const pauseExploring = () => {
+    activeRef.current = false;
+    controlsRef.current?.clearKeys();
+    exitLook();
+    setActive(false);
+  };
 
   if (!source) return null;
 
@@ -231,6 +329,7 @@ export default function SplatViewer({ world, url, label }) {
         className="relative w-full rounded-[18px] overflow-hidden"
         role="application"
         aria-label={label ? `3D walkthrough of ${label}` : "3D walkthrough"}
+        tabIndex={0}
       >
         {status === "loading" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
@@ -256,28 +355,38 @@ export default function SplatViewer({ world, url, label }) {
           </div>
         )}
 
-        {status === "ready" && !locked && (
+        {status === "ready" && !active && (
           <button
-            onClick={() => mountRef.current?.querySelector("canvas")?.requestPointerLock?.()}
+            onClick={startExploring}
             className="absolute inset-0 flex flex-col items-center justify-center gap-2"
             style={{ background: "rgba(13,21,18,.55)", border: "none", cursor: "pointer" }}
           >
-            <span style={{ color: "#FFFFFF", fontFamily: SANS }} className="text-base font-bold">Click to walk through</span>
+            <span style={{ color: "#FFFFFF", fontFamily: SANS }} className="text-base font-bold">Start exploring</span>
             <span style={{ color: "rgba(255,255,255,.7)", fontFamily: SANS }} className="text-xs">
-              W A S D or arrow keys to move · mouse to look · Shift to move faster · Esc to stop
+              Drag to look · W A S D or arrow keys to move
             </span>
           </button>
         )}
+        {status === "ready" && active && (
+          <div className="ef-viewer-pad" aria-label="Walkthrough movement controls">
+            <button aria-label="Move forward" onClick={() => controlsRef.current?.step("KeyW")}>↑</button>
+            <div>
+              <button aria-label="Move left" onClick={() => controlsRef.current?.step("KeyA")}>←</button>
+              <button aria-label="Move backward" onClick={() => controlsRef.current?.step("KeyS")}>↓</button>
+              <button aria-label="Move right" onClick={() => controlsRef.current?.step("KeyD")}>→</button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {status === "ready" && locked && (
-        <div className="flex items-center justify-between gap-4 mt-2">
-          <span style={{ color: C.inkSoft, fontFamily: SANS }} className="text-xs">
-            W A S D to move · mouse to look · Shift to move faster · Esc to stop
-          </span>
-          <button onClick={exitLook} style={{ color: C.brassDark, fontFamily: SANS }} className="text-xs font-bold underline">
-            Stop walking
-          </button>
+      {status === "ready" && active && (
+        <div className="ef-viewer-toolbar">
+          <span>{locked ? "Mouse look active · Esc to release" : "Drag to look · W A S D or arrows to walk · Shift to move faster"}</span>
+          <div>
+            <button onClick={() => controlsRef.current?.reset()}>Reset view</button>
+            {!locked && !lockUnavailable && <button onClick={() => controlsRef.current?.requestLock()}>Use mouse look</button>}
+            <button onClick={pauseExploring}>Pause</button>
+          </div>
         </div>
       )}
     </div>

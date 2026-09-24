@@ -3,7 +3,7 @@
 ## Suggested walkthrough
 
 1. Open **Explore homes** or the featured Harbor View Residence on the dashboard.
-2. Show the sample listing, approximate Miami area map link, and the prepared 3D walkthrough. Its progress bar reports the actual local scene file download and decoding.
+2. Show the sample listing, approximate Miami area map link, and the prepared 3D walkthrough. Its progress bar reports the actual local scene file download and decoding. Choose **Start exploring**, then drag to look, use W A S D or arrow keys to walk, or click the movement arrows on the scene. **Reset view** returns to the starting position.
 3. Return home and choose **New property**.
 4. Select **Garden View Residence · sample details** from the dropdown. The form fills the sample address, price, size, beds and baths.
 5. Continue to the photo step. One bundled exterior image appears. Use **Open prepared 3D tour** to demonstrate the no-wait path; it reads a scene bundled with the website instead of calling the generation API. The working interior is the default. The second supplied `.spz` is available as **Alternate supplied scan** in the viewer; its current rendering is incomplete.

@@ -129,6 +129,14 @@ body { margin: 0; background: #f6f7f5; color: #1e2b32; font-family: "Urbanist", 
 .ef-tour-choices button { padding: 9px 13px; border: 1px solid #cbdcd6; border-radius: 8px; background: #fff; color: #285e62; font-size: 12px; font-weight: 700; cursor: pointer; }
 .ef-tour-choices button.is-selected { border-color: #285e62; background: #eaf3f0; color: #214f53; }
 .ef-scan-note { margin: 0 0 13px; padding: 10px 12px; border-left: 3px solid #a67f48; background: #faf5ea; color: #705734; font-size: 12px; line-height: 1.5; }
+.ef-viewer-pad { position: absolute; right: 14px; bottom: 14px; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.ef-viewer-pad > div { display: flex; gap: 5px; }
+.ef-viewer-pad button { display: grid; place-items: center; width: 39px; height: 39px; padding: 0; border: 1px solid rgba(255,255,255,.5); border-radius: 8px; background: rgba(15,27,27,.78); color: #fff; font-size: 21px; line-height: 1; cursor: pointer; touch-action: manipulation; }
+.ef-viewer-pad button:hover, .ef-viewer-pad button:focus-visible { background: #285e62; }
+.ef-viewer-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; color: #58676e; font-size: 12px; }
+.ef-viewer-toolbar > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.ef-viewer-toolbar button { padding: 5px 8px; border: 1px solid #cbdcd6; border-radius: 6px; background: #fff; color: #285e62; font-size: 12px; font-weight: 700; cursor: pointer; }
+.ef-viewer-toolbar button:hover { background: #eaf3f0; }
 
 @media (max-width: 1000px) {
   .ef-property-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -174,4 +182,7 @@ body { margin: 0; background: #f6f7f5; color: #1e2b32; font-family: "Urbanist", 
   .ef-detail-head { align-items: flex-start; flex-direction: column; }
   .ef-detail-head > strong { font-size: 23px; }
   .ef-detail-panel { padding: 18px; }
+  .ef-viewer-toolbar { align-items: flex-start; flex-direction: column; }
+  .ef-viewer-pad { right: 8px; bottom: 8px; }
+  .ef-viewer-pad button { width: 36px; height: 36px; }
 }

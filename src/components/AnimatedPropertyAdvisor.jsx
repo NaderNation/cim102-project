@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 
-const TILE_SVGS = {
-  a: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 210 140'><defs><linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#BFD9EA'/><stop offset='1' stop-color='#EAF3F7'/></linearGradient></defs><rect width='210' height='140' fill='url(#s)'/><rect y='100' width='210' height='40' fill='#8DB596'/><rect x='50' y='52' width='110' height='58' fill='#F3EBDD'/><path d='M40 54 105 16 170 54z' fill='#1D4D43'/><rect x='94' y='76' width='22' height='34' fill='#8A5A3C'/><rect x='62' y='66' width='22' height='18' fill='#9CC3D8'/><rect x='126' y='66' width='22' height='18' fill='#9CC3D8'/></svg>",
-  b: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 210 140'><rect width='210' height='140' fill='#E8E4DC'/><rect y='104' width='210' height='36' fill='#B9A78C'/><rect x='118' y='20' width='64' height='56' fill='#BFD9EA' stroke='#fff' stroke-width='5'/><rect x='24' y='70' width='96' height='34' rx='10' fill='#5F7F9C'/><rect x='24' y='58' width='96' height='22' rx='8' fill='#7395B2'/><rect x='60' y='108' width='90' height='10' rx='5' fill='#D9C9A8'/></svg>",
-  c: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 210 140'><rect width='210' height='140' fill='#F1F0EA'/><rect y='108' width='210' height='32' fill='#C9BBA0'/><rect x='10' y='18' width='190' height='34' fill='#1D4D43'/><rect x='10' y='70' width='190' height='40' fill='#2E6B5D'/><rect x='40' y='84' width='130' height='24' rx='3' fill='#FBFCFA'/><circle cx='70' cy='8' r='6' fill='#D6B584'/><circle cx='140' cy='8' r='6' fill='#D6B584'/></svg>",
-  d: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 210 140'><rect width='210' height='140' fill='#DDE6EE'/><rect y='108' width='210' height='32' fill='#C7B79A'/><rect x='20' y='26' width='92' height='30' rx='6' fill='#8DA6BC'/><rect x='24' y='58' width='150' height='40' rx='8' fill='#F8FBF8'/><rect x='24' y='70' width='150' height='28' rx='8' fill='#B9CEC1'/><rect x='140' y='16' width='50' height='40' fill='#EAF3F7' stroke='#fff' stroke-width='4'/></svg>",
-};
+const HOUSE_IMAGES = [
+  `${import.meta.env.BASE_URL}houses/modern-stone.jpg`,
+  `${import.meta.env.BASE_URL}houses/coastal.jpg`,
+  `${import.meta.env.BASE_URL}houses/brick-colonial.jpg`,
+  `${import.meta.env.BASE_URL}houses/modern-stucco.jpg`,
+];
 const ADVISOR_CSS = `
 .advisor-stage{position:relative;height:clamp(220px,34vw,340px);border-radius:28px;overflow:hidden;isolation:isolate;background:linear-gradient(135deg,#E3EEE7 0%,#F4F8F5 55%,#DDE8F2 100%);box-shadow:0 18px 40px rgba(23,32,29,.10)}
 .property-collage{position:absolute;inset:-14% -6%;display:flex;flex-direction:column;justify-content:center;gap:16px;transform:rotate(-4deg);opacity:.92;z-index:0}
@@ -13,7 +13,6 @@ const ADVISOR_CSS = `
 .property-collage-track-one{animation:ef-marquee-left 48s linear infinite}
 .property-collage-track-two{animation:ef-marquee-right 56s linear infinite}
 .property-tile{flex:0 0 auto;width:210px;height:140px;border-radius:16px;background-size:cover;background-position:center;border:4px solid rgba(255,255,255,.88);box-shadow:0 8px 20px rgba(23,32,29,.16)}
-${Object.entries(TILE_SVGS).map(([k, v]) => `.property-tile-${k}{background-image:url("data:image/svg+xml,${encodeURIComponent(v)}")}`).join("\n")}
 .advisor-stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 62%,rgba(251,252,250,.6),rgba(251,252,250,0) 62%)}
 .advisor-webgl{position:absolute;inset:0;z-index:2}
 .advisor-fallback{display:none}
@@ -175,9 +174,11 @@ export default function AnimatedPropertyAdvisor() {
     <div aria-hidden="true" className="advisor-stage">
       <style>{ADVISOR_CSS}</style>
       <div className="property-collage">
-        {[["one", ["a", "b", "c", "d"]], ["two", ["c", "a", "d", "b"]]].map(([track, order]) => (
+        {[["one", [0, 1, 2, 3]], ["two", [2, 0, 3, 1]]].map(([track, order]) => (
           <div key={track} className={`property-collage-track property-collage-track-${track}`}>
-            {[0, 1, 2, 3].flatMap(() => order).map((tile, i) => <div key={i} className={`property-tile property-tile-${tile}`} />)}
+            {[0, 1, 2, 3].flatMap(() => order).map((tile, i) => (
+              <div key={`${track}-${i}`} className="property-tile" style={{ backgroundImage: `url("${HOUSE_IMAGES[tile]}")` }} />
+            ))}
           </div>
         ))}
       </div>

@@ -55,7 +55,7 @@ export default function UploadPhotos({
           Drag photos here, or click to browse
         </div>
         <div style={{ color: C.inkSoft, fontFamily: "Arial, sans-serif" }} className="text-xs">
-          Each photo is auto-scored for quality and auto-tagged by room
+          Photos are ranked by image quality, with room labels you can review below
         </div>
         <input
           ref={fileInputRef}
@@ -83,7 +83,7 @@ export default function UploadPhotos({
         <div className="mt-8">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
             <div style={{ color: C.ink, fontFamily: "Arial, sans-serif" }} className="text-sm font-bold">
-              {photos.length} photo{photos.length > 1 ? "s" : ""} uploaded · ranked by AI quality score
+              {photos.length} photo{photos.length > 1 ? "s" : ""} uploaded · sorted by quality score
             </div>
             {stillClassifying && (
               <div style={{ color: C.brassDark, fontFamily: "Arial, sans-serif" }} className="text-xs font-semibold">
@@ -209,7 +209,7 @@ export default function UploadPhotos({
 
           <div style={{ color: C.inkSoft, fontFamily: "Arial, sans-serif" }} className="text-xs mt-3 max-w-xl">
             {photos.length > 0
-              ? "Room type is AI-detected from each photo. Enter length and width to calculate room area; the measurements are added to that room's highlight ad."
+              ? "Room labels are suggested from each photo. Enter length and width to calculate room area; the measurements are added to that room's highlight ad."
               : "Imported room dimensions are ready. Generate the floor-plan model now, or add photos to create visual ads too."}
           </div>
 

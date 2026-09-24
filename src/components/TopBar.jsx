@@ -1,69 +1,85 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Building2, KeyRound } from "../icons.jsx";
-import { C, SANS } from "../theme.js";
+import React, { useEffect, useRef, useState } from "react";
+import { Building2, Plus } from "../icons.jsx";
 
-export default function TopBar({ view, onDashboard, onSelectListings, onCreateAccount, onSettings }) {
-  const [open, setOpen] = useState(false);
-  const wrapRef = useRef(null);
+export default function TopBar({ view, onDashboard, onSelectListings, onCreateAccount, onSettings, onCreate }) {
+  const [openMenu, setOpenMenu] = useState(null);
+  const listingsRef = useRef(null);
+  const mobileRef = useRef(null);
+
   useEffect(() => {
-    if (!open) return undefined;
-    const close = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
-    const esc = (e) => { if (e.key === "Escape") setOpen(false); };
-    document.addEventListener("mousedown", close);
-    document.addEventListener("keydown", esc);
-    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc); };
-  }, [open]);
-  const pick = (which) => { setOpen(false); onSelectListings(which); };
-  const item = { display: "block", width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer", padding: "12px 16px", borderRadius: 10, fontFamily: SANS };
+    if (!openMenu) return undefined;
+    const closeOutside = (event) => {
+      if (!listingsRef.current?.contains(event.target) && !mobileRef.current?.contains(event.target)) {
+        setOpenMenu(null);
+      }
+    };
+    const closeEscape = (event) => { if (event.key === "Escape") setOpenMenu(null); };
+    document.addEventListener("mousedown", closeOutside);
+    document.addEventListener("keydown", closeEscape);
+    return () => {
+      document.removeEventListener("mousedown", closeOutside);
+      document.removeEventListener("keydown", closeEscape);
+    };
+  }, [openMenu]);
+
+  const select = (action) => {
+    setOpenMenu(null);
+    action();
+  };
+
   return (
-    <header style={{ background: "rgba(26,26,26,0.94)", borderBottom: `1px solid ${C.line}`, backdropFilter: "blur(12px)", position: "sticky", top: "env(safe-area-inset-top, 0px)", zIndex: 20, padding: "14px max(24px, calc((100vw - 1440px) / 2))", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontFamily: SANS }}>
-      <style>{".ef-menu-item:hover,.ef-menu-item:focus-visible{background:#262626!important;outline:none}"}</style>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <div style={{ background: C.paperDim, width: 36, height: 36, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <Building2 size={20} color={C.brass} />
-        </div>
-        <div>
-          <div style={{ color: C.ink, letterSpacing: "0.12em", fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>ESTATEFLOW</div>
-          <div style={{ color: C.inkSoft, fontSize: 12, letterSpacing: "0.02em", marginTop: 2 }}>property intelligence studio</div>
-        </div>
-        <div ref={wrapRef} style={{ position: "relative" }}>
+    <header className="ef-topbar">
+      <div className="ef-topbar-inner">
+        <button className="ef-brand" onClick={() => select(onDashboard)} aria-label="EstateFlow home">
+          <span className="ef-brand-mark"><Building2 size={18} /></span>
+          <span>EstateFlow</span>
+        </button>
+
+        <nav className="ef-desktop-nav" aria-label="Main navigation">
+          <button className={`ef-nav-link ${view === "dashboard" ? "is-active" : ""}`} onClick={() => select(onDashboard)}>Home</button>
+          <div className="ef-menu-anchor" ref={listingsRef}>
+            <button
+              className={`ef-nav-link ${view === "public" ? "is-active" : ""}`}
+              onClick={() => setOpenMenu(openMenu === "listings" ? null : "listings")}
+              aria-haspopup="menu"
+              aria-expanded={openMenu === "listings"}
+            >
+              Properties <span aria-hidden="true">⌄</span>
+            </button>
+            {openMenu === "listings" && (
+              <div className="ef-nav-menu" role="menu">
+                <button role="menuitem" onClick={() => select(() => onSelectListings("own"))}>Your listings</button>
+                <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Public listings</button>
+              </div>
+            )}
+          </div>
+          <button className={`ef-nav-link ${view === "settings" ? "is-active" : ""}`} onClick={() => select(onSettings)}>Settings</button>
+          <button className="ef-nav-link" onClick={() => select(onCreateAccount)}>Account</button>
+        </nav>
+
+        <button className="ef-topbar-cta" onClick={() => select(onCreate)}><Plus size={16} /> New property</button>
+
+        <div className="ef-mobile-nav" ref={mobileRef}>
           <button
-            onClick={() => setOpen((o) => !o)}
+            className="ef-mobile-menu-button"
+            onClick={() => setOpenMenu(openMenu === "mobile" ? null : "mobile")}
             aria-haspopup="menu"
-            aria-expanded={open}
-            style={{ background: C.paper, color: C.ink, border: `1px solid ${C.line}`, borderRadius: 10, padding: "9px 16px", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: SANS }}
+            aria-expanded={openMenu === "mobile"}
+            aria-label="Open navigation menu"
           >
-            View listings
+            <span aria-hidden="true">☰</span><span>Menu</span>
           </button>
-          {open && (
-            <div role="menu" style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, width: 300, maxWidth: "calc(100vw - 48px)", background: C.card, border: `1px solid ${C.line}`, borderRadius: 12, boxShadow: "0 16px 40px rgba(0,0,0,0.48)", padding: "16px 12px 12px", zIndex: 30 }}>
-              <div style={{ color: C.forest, fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", padding: "0 16px 8px" }}>WHICH LISTINGS?</div>
-              <button role="menuitem" className="ef-menu-item" onClick={() => pick("public")} style={item}>
-                <div style={{ color: C.ink, fontSize: 16, fontWeight: 700 }}>View public listings</div>
-                <div style={{ color: C.inkSoft, fontSize: 13, marginTop: 2 }}>Explore available properties</div>
-              </button>
-              <button role="menuitem" className="ef-menu-item" onClick={() => pick("own")} style={item}>
-                <div style={{ color: C.ink, fontSize: 16, fontWeight: 700 }}>View your own listings</div>
-                <div style={{ color: C.inkSoft, fontSize: 13, marginTop: 2 }}>Your saved EstateFlow properties</div>
-              </button>
+          {openMenu === "mobile" && (
+            <div className="ef-nav-menu ef-mobile-menu" role="menu">
+              <button role="menuitem" onClick={() => select(onDashboard)}>Home</button>
+              <button role="menuitem" onClick={() => select(() => onSelectListings("own"))}>Your listings</button>
+              <button role="menuitem" onClick={() => select(() => onSelectListings("public"))}>Public listings</button>
+              <button role="menuitem" onClick={() => select(onCreate)}>New property</button>
+              <button role="menuitem" onClick={() => select(onSettings)}>Settings</button>
+              <button role="menuitem" onClick={() => select(onCreateAccount)}>Account</button>
             </div>
           )}
         </div>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        {view !== "dashboard" && view !== "public" && (
-          <button onClick={onDashboard} style={{ background: "none", border: "none", cursor: "pointer", color: C.inkSoft, fontSize: 14, display: "flex", alignItems: "center", gap: 6, fontFamily: SANS }}>
-            <ArrowLeft size={16} /> Dashboard
-          </button>
-        )}
-        {view !== "settings" && (
-          <button onClick={onSettings} aria-label="Settings" style={{ background: "none", border: "none", cursor: "pointer", color: C.inkSoft, fontSize: 14, display: "flex", alignItems: "center", gap: 6, fontFamily: SANS }}>
-            <KeyRound size={16} /> Settings
-          </button>
-        )}
-        <button onClick={onCreateAccount} style={{ background: C.brassDark, color: "#FFFFFF", border: "none", borderRadius: 10, padding: "12px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: SANS }}>
-          Create account
-        </button>
       </div>
     </header>
   );

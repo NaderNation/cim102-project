@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Sparkles, Check, Globe2, KeyRound, Loader2, ExternalLink, AlertCircle } from "../icons.jsx";
+import { Check, Globe2, KeyRound, Loader2, ExternalLink, AlertCircle } from "../icons.jsx";
 import { C } from "../theme.js";
 import { shrinkForMarble } from "../lib/photo.js";
 import { loadApiKey, saveApiKey } from "../lib/settings.js";
@@ -63,8 +63,8 @@ export default function MarbleWorldTour({ photos, draft }) {
 
   const statusLabel = {
     uploading: "Uploading photo...",
-    generating: "Starting world generation...",
-    polling: "Generating explorable 3D world - this can take a few minutes...",
+    generating: "Starting 3D tour...",
+    polling: "Building your 3D tour — this can take a few minutes...",
   }[state.status];
 
   const openExternalUrl = useCallback((url) => {
@@ -77,9 +77,9 @@ export default function MarbleWorldTour({ photos, draft }) {
     <section style={{ borderColor: C.line, background: C.card }} className="border rounded-sm overflow-hidden mb-10">
       <div className="p-6 pb-4 flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <div style={{ color: C.brassDark }} className="text-xs font-bold tracking-widest flex items-center gap-2"><Globe2 size={14} /> WORLD LABS MARBLE TOUR</div>
+          <div style={{ color: C.brassDark }} className="text-xs font-bold tracking-widest flex items-center gap-2"><Globe2 size={14} /> INTERACTIVE 3D TOUR</div>
           <h2 style={{ color: C.ink }} className="text-3xl mt-2">Explore {roomName} in 3D</h2>
-          <p style={{ color: C.inkSoft }} className="text-sm mt-2 max-w-xl">Turn a property photo into an interactive World Labs Marble reconstruction. Your API key stays in this browser session.</p>
+          <p style={{ color: C.inkSoft }} className="text-sm mt-2 max-w-xl">Create an interactive walkthrough from a property photo. New tours require a World Labs key.</p>
         </div>
         <div style={{ color: C.forest, background: C.paperDim }} className="text-xs font-bold px-3 py-2 rounded-full">{tourPhotos.length} rooms available</div>
       </div>
@@ -99,8 +99,8 @@ export default function MarbleWorldTour({ photos, draft }) {
             return <button key={photo.id} onClick={() => setActiveIndex(index)} aria-label={`Select ${photo.roomType || `room ${index + 1}`}`} style={{ borderColor: index === activeIndex ? C.brass : C.line, background: index === activeIndex ? C.paperDim : C.card }} className="flex-none border rounded-xl p-1.5 text-left relative"><img src={photo.dataUrl} alt="" className="w-20 h-14 object-cover rounded-lg" /><span style={{ color: C.ink }} className="block text-[11px] font-bold mt-1 px-0.5">{photo.roomType || `Room ${index + 1}`}</span>{photoState.status === "done" && <span style={{ background: C.brass }} className="absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center"><Check size={10} color="#fff" /></span>}</button>;
           })}
         </div>
-        <div className="relative overflow-hidden rounded-[18px] bg-[#17201d] min-h-[280px] flex items-center justify-center p-6">
-          {state.status === "done" && state.world ? <div className="w-full flex flex-col items-center gap-3">{hasSplat(state.world) ? <SplatViewer world={state.world} url={pickSplatUrl(state.world, quality)} label={roomName} /> : <PanoViewer url={state.world.assets?.pano_url || state.world.assets?.imagery?.pano_url} thumbnail={state.world.assets?.thumbnail_url} alt={`${roomName} 3D world`} />}<div className="flex items-center gap-4 text-xs"><span style={{ color: "rgba(255,255,255,.7)" }}>{hasSplat(state.world) ? "Click the scene to walk through it" : "Drag to look around · scroll to zoom"}</span>{hasSplat(state.world) && <span style={{ color: "rgba(255,255,255,.7)" }}>Quality: {["100k", "500k", "full_res"].map((q) => <button key={q} onClick={() => setQuality(q)} style={{ color: quality === q ? "#FFFFFF" : "rgba(255,255,255,.5)", fontWeight: quality === q ? 700 : 400, background: "none", border: "none", cursor: "pointer", padding: "0 4px" }}>{q === "full_res" ? "full" : q}</button>)}</span>}<button onClick={() => generate(activePhoto)} style={{ color: "rgba(255,255,255,.7)" }} className="underline">Regenerate this room</button>{state.world.world_marble_url && <button onClick={() => openExternalUrl(state.world.world_marble_url)} style={{ color: "rgba(255,255,255,.7)" }} className="underline">Open full version</button>}</div></div> : state.status === "uploading" || state.status === "generating" || state.status === "polling" ? <div className="flex flex-col items-center gap-3 text-center" style={{ color: "white" }}><Loader2 size={28} className="animate-spin" /><div className="text-sm">{statusLabel}</div><div style={{ color: "rgba(255,255,255,.62)" }} className="text-xs max-w-sm">EstateFlow is sending the selected room photo and spatial context to Marble.</div></div> : <div className="flex flex-col items-center gap-4 text-center"><img src={activePhoto.dataUrl} alt={roomName} className="max-h-56 rounded-lg object-contain opacity-70" />{state.status === "error" && <div style={{ color: "#F3B9B0" }} className="text-xs flex items-center gap-1.5 max-w-md"><AlertCircle size={14} /> {state.error}</div>}<button onClick={() => generate(activePhoto)} style={{ background: C.brass, color: "#FFFFFF" }} className="inline-flex items-center gap-2 px-5 py-3 rounded-sm text-sm font-bold hover:opacity-90 transition"><Sparkles size={16} /> Generate 3D world from this photo</button></div>}
+        <div className="relative overflow-hidden rounded-[18px] bg-[#141414] min-h-[280px] flex items-center justify-center p-6">
+          {state.status === "done" && state.world ? <div className="w-full flex flex-col items-center gap-3">{hasSplat(state.world) ? <SplatViewer world={state.world} url={pickSplatUrl(state.world, quality)} label={roomName} /> : <PanoViewer url={state.world.assets?.pano_url || state.world.assets?.imagery?.pano_url} thumbnail={state.world.assets?.thumbnail_url} alt={`${roomName} 3D world`} />}<div className="flex items-center gap-4 text-xs"><span style={{ color: "rgba(255,255,255,.7)" }}>{hasSplat(state.world) ? "Click the scene to walk through it" : "Drag to look around · scroll to zoom"}</span>{hasSplat(state.world) && <span style={{ color: "rgba(255,255,255,.7)" }}>Quality: {["100k", "500k", "full_res"].map((q) => <button key={q} onClick={() => setQuality(q)} style={{ color: quality === q ? "#FFFFFF" : "rgba(255,255,255,.5)", fontWeight: quality === q ? 700 : 400, background: "none", border: "none", cursor: "pointer", padding: "0 4px" }}>{q === "full_res" ? "full" : q}</button>)}</span>}<button onClick={() => generate(activePhoto)} style={{ color: "rgba(255,255,255,.7)" }} className="underline">Regenerate this room</button>{state.world.world_marble_url && <button onClick={() => openExternalUrl(state.world.world_marble_url)} style={{ color: "rgba(255,255,255,.7)" }} className="underline">Open full version</button>}</div></div> : state.status === "uploading" || state.status === "generating" || state.status === "polling" ? <div className="flex flex-col items-center gap-3 text-center" style={{ color: "white" }}><Loader2 size={28} className="animate-spin" /><div className="text-sm">{statusLabel}</div><div style={{ color: "rgba(255,255,255,.62)" }} className="text-xs max-w-sm">Your photo is being sent to World Labs to build the walkthrough.</div></div> : <div className="flex flex-col items-center gap-4 text-center"><img src={activePhoto.dataUrl} alt={roomName} className="max-h-56 rounded-lg object-contain opacity-70" />{state.status === "error" && <div style={{ color: "#F3B9B0" }} className="text-xs flex items-center gap-1.5 max-w-md"><AlertCircle size={14} /> {state.error}</div>}<button onClick={() => generate(activePhoto)} style={{ background: C.brass, color: "#FFFFFF" }} className="inline-flex items-center gap-2 px-5 py-3 rounded-sm text-sm font-bold hover:opacity-90 transition"><Globe2 size={16} /> Generate 3D tour from this photo</button></div>}
         </div>
       </div>
     </section>

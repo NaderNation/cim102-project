@@ -66,7 +66,7 @@ export default function Settings({ onBack, onStorageCleared }) {
       <div style={{ color: C.brassDark, fontFamily: SANS }} className="text-xs font-bold tracking-widest flex items-center gap-2">
         <KeyRound size={14} /> SETTINGS
       </div>
-      <h1 style={{ color: C.ink, fontFamily: SERIF }} className="text-4xl mt-2 mb-8">Keys &amp; storage</h1>
+      <h1 style={{ color: C.ink, fontFamily: SERIF }} className="text-3xl sm:text-4xl mt-2 mb-8">Keys &amp; storage</h1>
 
       <section style={card} className="border rounded-sm p-6 mb-6">
         <h2 style={{ color: C.ink, fontFamily: SERIF }} className="text-2xl mb-1">World Labs API key</h2>

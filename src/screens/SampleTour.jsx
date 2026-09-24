@@ -31,18 +31,16 @@ export default function SampleTour({ onBack }) {
       <div style={{ color: C.brassDark, fontFamily: SANS }} className="text-xs font-bold tracking-widest flex items-center gap-2">
         <Globe2 size={14} /> SAMPLE PROPERTY
       </div>
-      <h1 style={{ color: C.ink, fontFamily: SERIF }} className="text-4xl mt-2 mb-2">Walk through a finished tour</h1>
+      <h1 style={{ color: C.ink, fontFamily: SERIF }} className="text-3xl sm:text-4xl mt-2 mb-2">Walk through a finished tour</h1>
       <p style={{ color: C.inkSoft, fontFamily: SANS }} className="text-sm mb-6 max-w-2xl">
-        This is a real World Labs Marble reconstruction, generated from a single photograph and shipped with the
-        project. It loads straight from this machine — no API key, no credits, no waiting. It is what a listing
-        photo becomes after the Marble step.
+        Explore a ready-to-use interior walkthrough. Move through the space to see how a finished tour can sit
+        alongside a property listing.
       </p>
 
       <SplatViewer world={SAMPLE_WORLD} url={SAMPLE_SPLAT_URL} label="the sample interior" />
 
       <p style={{ color: C.inkSoft, fontFamily: SANS }} className="text-xs mt-4 max-w-2xl">
-        The scene is a reconstruction, not a measured survey. Detail falls away at the edges of what the original
-        photograph could see — walking outward will find that boundary.
+        This is an illustrative reconstruction. Verify the layout, features, and measurements at the property.
       </p>
     </div>
   );

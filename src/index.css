@@ -10,6 +10,102 @@ body { margin: 0; background: #141414; color: #FFFFFF; font-family: "Urbanist", 
 .estateflow-app button:focus-visible, .estateflow-app a:focus-visible, .estateflow-app input:focus-visible, .estateflow-app select:focus-visible, .estateflow-app textarea:focus-visible { outline: 2px solid #A685FA; outline-offset: 2px; }
 .estateflow-app input, .estateflow-app select, .estateflow-app textarea { color-scheme: dark; }
 
+.ef-topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(26,26,26,.96); border-bottom: 1px solid #262626; backdrop-filter: blur(12px); }
+.ef-topbar-inner { max-width: 1328px; min-height: 70px; margin: 0 auto; padding: 11px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.ef-brand { display: inline-flex; align-items: center; gap: 9px; padding: 0; border: 0; background: none; color: #fff; font-size: 17px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+.ef-brand-mark { display: inline-flex; align-items: center; justify-content: center; width: 31px; height: 31px; color: #a685fa; }
+.ef-desktop-nav { display: flex; align-items: center; gap: 5px; }
+.ef-nav-link { display: inline-flex; align-items: center; gap: 5px; padding: 10px 14px; border: 1px solid transparent; border-radius: 9px; background: none; color: #d9d9d9; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.ef-nav-link:hover, .ef-nav-link.is-active { background: #141414; border-color: #262626; color: #fff; }
+.ef-menu-anchor, .ef-mobile-nav { position: relative; }
+.ef-nav-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; min-width: 190px; padding: 7px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.42); }
+.ef-nav-menu button { display: block; width: 100%; padding: 10px 12px; border: 0; border-radius: 7px; background: none; color: #fff; text-align: left; font-size: 13px; cursor: pointer; }
+.ef-nav-menu button:hover, .ef-nav-menu button:focus-visible { background: #262626; }
+.ef-topbar-cta, .ef-primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; padding: 10px 16px; border: 1px solid #703bf7; border-radius: 9px; background: #703bf7; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; cursor: pointer; }
+.ef-topbar-cta:hover, .ef-primary-button:hover { background: #8052fa; border-color: #8052fa; }
+.ef-mobile-nav { display: none; }
+.ef-mobile-menu-button { display: inline-flex; align-items: center; gap: 8px; min-height: 39px; padding: 8px 12px; border: 1px solid #333; border-radius: 9px; background: #141414; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+.ef-dashboard-hero { display: grid; grid-template-columns: minmax(0,1.08fr) minmax(0,.92fr); overflow: hidden; min-height: 386px; border: 1px solid #262626; border-radius: 12px; background: #1a1a1a; }
+.ef-hero-copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 42px; }
+.ef-section-kicker { color: #a685fa; font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+.ef-hero-copy h1 { max-width: 590px; margin: 14px 0 12px; color: #fff; font-size: clamp(32px, 3.5vw, 43px); line-height: 1.12; font-weight: 700; letter-spacing: -.025em; }
+.ef-hero-copy p { max-width: 520px; margin: 0; color: #aaa; font-size: 15px; line-height: 1.6; }
+.ef-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+.ef-secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 10px 16px; border: 1px solid #333; border-radius: 9px; background: #141414; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.ef-secondary-button:hover { background: #262626; }
+.ef-hero-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-top: 34px; }
+.ef-hero-stat { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 13px 15px; border: 1px solid #2b2b2b; border-radius: 9px; background: #141414; }
+.ef-hero-stat strong { color: #fff; font-size: 22px; line-height: 1.1; }
+.ef-hero-stat span { color: #999; font-size: 11px; white-space: nowrap; }
+.ef-hero-photo { position: relative; min-height: 100%; overflow: hidden; background: #262626; }
+.ef-hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.ef-hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(140deg,rgba(20,20,20,.03) 45%,rgba(112,59,247,.22)); pointer-events: none; }
+
+.ef-tour-prompt { display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 18px; padding: 16px 19px; border: 1px solid #262626; border-radius: 11px; background: #1a1a1a; color: #fff; text-align: left; cursor: pointer; }
+.ef-tour-prompt:hover { border-color: #703bf7; }
+.ef-tour-icon { display: flex; align-items: center; justify-content: center; flex: none; width: 40px; height: 40px; border-radius: 9px; background: rgba(112,59,247,.15); color: #a685fa; }
+.ef-tour-copy { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.ef-tour-copy strong { font-size: 14px; font-weight: 700; }
+.ef-tour-copy span { color: #999; font-size: 12px; line-height: 1.4; }
+.ef-tour-action { flex: none; color: #a685fa; font-size: 13px; font-weight: 700; white-space: nowrap; }
+
+.ef-listings-section { margin-top: 44px; }
+.ef-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.ef-section-heading h2 { margin: 8px 0 4px; color: #fff; font-size: 31px; line-height: 1.2; font-weight: 700; }
+.ef-section-heading p { margin: 0; color: #999; font-size: 13px; line-height: 1.5; }
+.ef-listing-count { color: #999; font-size: 13px; white-space: nowrap; }
+.ef-empty-listings { display: flex; align-items: center; gap: 18px; padding: 24px; border: 1px solid #262626; border-radius: 11px; background: #1a1a1a; }
+.ef-empty-icon { display: flex; align-items: center; justify-content: center; flex: none; width: 50px; height: 50px; border-radius: 10px; background: rgba(112,59,247,.15); color: #a685fa; }
+.ef-empty-listings h3 { margin: 0 0 4px; color: #fff; font-size: 17px; font-weight: 700; }
+.ef-empty-listings p { margin: 0; color: #999; font-size: 13px; }
+.ef-empty-listings .ef-primary-button { margin-left: auto; }
+.ef-property-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.ef-property-card { min-width: 0; padding: 16px; border: 1px solid #262626; border-radius: 11px; background: #141414; }
+.ef-property-cover { display: block; width: 100%; height: 195px; border-radius: 8px; object-fit: cover; }
+.ef-property-placeholder { background: linear-gradient(135deg,#262626,#211735); }
+.ef-property-body { padding-top: 16px; }
+.ef-property-type { display: inline-flex; padding: 5px 9px; border: 1px solid #333; border-radius: 999px; background: #1a1a1a; color: #aaa; font-size: 11px; line-height: 1; }
+.ef-property-card h3 { min-height: 2.5em; margin: 12px 0; color: #fff; font-size: 16px; line-height: 1.25; font-weight: 700; }
+.ef-property-features { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 17px; }
+.ef-property-features span { padding: 5px 8px; border-radius: 6px; background: #1a1a1a; color: #ccc; font-size: 11px; }
+.ef-property-bottom { display: flex; align-items: end; justify-content: space-between; gap: 10px; padding-top: 15px; border-top: 1px solid #262626; }
+.ef-property-bottom div { display: flex; flex-direction: column; gap: 2px; }
+.ef-property-bottom small { color: #999; font-size: 11px; }
+.ef-property-bottom strong { color: #fff; font-size: 19px; line-height: 1.2; }
+.ef-property-bottom > span { color: #999; font-size: 11px; text-align: right; }
+
+@media (max-width: 1000px) {
+  .ef-property-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width: 850px) {
+  .ef-desktop-nav, .ef-topbar-cta { display: none; }
+  .ef-topbar-inner { min-height: 60px; padding: 10px 16px; }
+  .ef-mobile-nav { display: block; }
+  .ef-mobile-menu { left: auto; right: 0; min-width: 200px; }
+  .ef-dashboard-hero { grid-template-columns: 1fr; }
+  .ef-hero-photo { order: -1; height: 235px; min-height: 0; }
+  .ef-hero-copy { padding: 28px; }
+}
+
 @media (max-width: 640px) {
-  .estateflow-app main { padding-inline: 16px; }
+  .estateflow-app main { padding: 24px 16px 32px; }
+  .ef-hero-photo { height: 205px; }
+  .ef-hero-copy { padding: 23px; }
+  .ef-hero-copy h1 { font-size: 29px; }
+  .ef-hero-copy p { font-size: 13px; }
+  .ef-hero-stats { margin-top: 25px; }
+  .ef-hero-stat { padding: 10px 8px; }
+  .ef-hero-stat strong { font-size: 19px; }
+  .ef-hero-stat span { font-size: 10px; }
+  .ef-tour-prompt { gap: 10px; padding: 13px; }
+  .ef-tour-action { font-size: 0; }
+  .ef-tour-action span { font-size: 19px; }
+  .ef-listings-section { margin-top: 36px; }
+  .ef-section-heading h2 { font-size: 27px; }
+  .ef-empty-listings { flex-wrap: wrap; gap: 12px; padding: 20px; }
+  .ef-empty-listings .ef-primary-button { width: 100%; margin-left: 0; }
+  .ef-property-grid { grid-template-columns: 1fr; }
+  .ef-property-cover { height: 185px; }
 }
